@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronicles Underground | Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <div class="bg-grain"></div>
+    <div class="bg-glow"></div>
+
+    <div class="macbook-window" id="main-app">
+        <div class="title-bar">
+            <div class="traffic-lights">
+                <span class="traffic-light close"></span>
+                <span class="traffic-light minimize"></span>
+                <span class="traffic-light maximize"></span>
+            </div>
+            <div class="window-title">Chronicles Underground | Dashboard</div>
+            <div class="title-bar-spacer"></div>
+        </div>
+        <div class="window-body">
+            <!-- AUTH OVERLAY (inside MacBook window) -->
+            <div id="auth-overlay" class="auth-overlay active">
+                <div class="auth-window" role="dialog" aria-modal="true" aria-label="Authentication">
+                    <div class="auth-titlebar">
+                        <div class="auth-traffic" aria-hidden="true">
+                            <span class="auth-dot auth-close"></span>
+                            <span class="auth-dot auth-min"></span>
+                            <span class="auth-dot auth-max"></span>
+                        </div>
+                        <div class="auth-title">Chronicles Underground_AUTH</div>
+                    </div>
+
+                    <div class="auth-body">
+                        <div class="auth-header">
+                            <div class="auth-logo"><span class="logo-accent">C</span>hronicles Underground</div>
+                            <p>Establishing Secure Link...</p>
+                        </div>
+
+                        <div class="auth-tablet-card">
+                            <div id="login-form" class="auth-form">
+                                <input type="text" id="auth-user" placeholder="OPERATOR_ID" autocomplete="username">
+                                <input type="password" id="auth-pass" placeholder="ACCESS_CODE" autocomplete="current-password">
+                                <button class="btn-primary-glow" type="button" onclick="handleAuth('login')">INITIALIZE SESSION</button>
+                                <p class="auth-toggle">New Operator? <span onclick="toggleAuthForm(true)">Register Identity</span></p>
+                            </div>
+
+                            <div id="register-form" class="auth-form" style="display:none;">
+                                <input type="text" id="reg-user" placeholder="CREATE_OPERATOR_ID" autocomplete="username">
+                                <input type="password" id="reg-pass" placeholder="SET_ACCESS_CODE" autocomplete="new-password">
+                                <select id="reg-faction" class="auth-select">
+                                    <option value="">SELECT FACTION</option>
+                                    <option value="Cartel">Cartel</option>
+                                    <option value="Syndicate">Syndicate</option>
+                                    <option value="Brotherhood">Brotherhood</option>
+                                    <option value="Legion">Legion</option>
+                                    <option value="Vanguard">Vanguard</option>
+                                    <option value="Outlaws">Outlaws</option>
+                                    <option value="Shadows">Shadows</option>
+                                    <option value="None">None (Independent)</option>
+                                </select>
+                                <button class="btn-primary-glow" type="button" onclick="handleAuth('register')">CREATE IDENTITY</button>
+                                <p class="auth-toggle">Have Identity? <span onclick="toggleAuthForm(false)">Return to Login</span></p>
+                            </div>
+
+                            <div id="auth-error" class="error-msg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-shell">
+        <nav class="glass-nav">
+            <div class="logo">
+                <span class="logo-accent">C</span>hronicles Underground
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="showView('roulette')"><i class="fa-solid fa-dharmachakra"></i> Market</button>
+                <button class="nav-btn" onclick="showView('inventory')"><i class="fa-solid fa-box-archive"></i> Storage</button>
+                <button class="nav-btn" onclick="showView('wiki')"><i class="fa-solid fa-book-skull"></i> Database</button>
+                <button class="nav-btn" onclick="showView('management')"><i class="fa-solid fa-id-badge"></i> High Command</button>
+                <button class="nav-btn" onclick="showView('roe')"><i class="fa-solid fa-gavel"></i> ROE</button>
+                </div>
+            <div class="nav-stats">
+                <div class="stat-pill"><i class="fa-solid fa-coins"></i> <span id="balance">50,000</span></div>
+                <button class="chat-toggle-btn" id="chat-toggle-btn" onclick="toggleChat()" title="Open Chat">
+                    <i class="fa-solid fa-comments"></i>
+                </button>
+                <div class="profile-circle" id="profile-btn" title="Profile"></div>
+            </div>
+        </nav>
+
+        <main class="content-area">
+
+            <section id="view-roulette" class="view active">
+                <header class="view-header">
+                    <div class="badge"><span class="dot"></span> LIVE DROPS ACTIVE</div>
+                    <h1 id="roulette-title">Expand Your <span class="text-glow">Arsenal</span></h1>
+                    <p id="roulette-subtitle">Select a category and test your luck in the underground trade.</p>
+                </header>
+
+                <div class="roulette-controls">
+                    <div class="category-selector">
+                        <div class="tier-dropdown-wrapper">
+                            <button class="cat-btn active tier-btn" id="tier-btn" onclick="toggleTierDropdown()">
+                                Tier 1 <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="tier-dropdown" id="tier-dropdown">
+                                <button class="tier-option" onclick="changeTier(1)">Tier 1</button>
+                                <button class="tier-option" onclick="changeTier(2)">Tier 2</button>
+                            </div>
+                        </div>
+                        <button class="cat-btn" onclick="changeCategory('drugs', this)">Narcotics</button>
+                        <button class="cat-btn" onclick="changeCategory('attachments', this)">Attachments</button>
+                    </div>
+                    <button class="spin-btn" id="spin-button" onclick="startSpin()">INITIALIZE SPIN</button>
+                </div>
+
+                <div class="roulette-wrapper">
+                    <div class="pointer"></div>
+                    <div class="roulette-track" id="wheel">
+                        </div>
+                    <div class="track-overlay"></div>
+                </div>
+
+                <div id="win-announcement" class="win-banner">
+                    <p>ITEM ACQUIRED</p>
+                    <h2 id="won-item-name">GLOCK 17</h2>
+                </div>
+            </section>
+
+            <section id="view-inventory" class="view">
+                <div class="view-header">
+                    <h1>Your <span class="text-glow">Storage</span></h1>
+                    <p>Items collected from successful spins. Ready for deployment.</p>
+                </div>
+                <div class="grid" id="inventory-grid">
+                </div>
+            </section>
+
+            <section id="view-wiki" class="view">
+                <div class="view-header">
+                    <h1>Item <span class="text-glow">Intel</span></h1>
+                    <p>Advanced telemetry and specifications for all available hardware.</p>
+                </div>
+                <div class="grid" id="wiki-grid">
+                    </div>
+            </section>
+
+            <section id="view-management" class="view">
+                <div class="view-header">
+                    <h1>Faction <span class="text-glow">Management</span></h1>
+                    <p>Verified Administrative oversight and Faction Leadership directory.</p>
+                </div>
+
+                <div class="management-container">
+                    <div class="mgmt-tier">
+                        <h2 class="tier-label">Lead Faction Management</h2>
+                        <div class="mgmt-grid" id="lead-mgmt-grid">
+                        </div>
+                    </div>
+
+                    <div class="mgmt-tier">
+                        <h2 class="tier-label">Faction Management</h2>
+                        <div class="mgmt-grid" id="staff-mgmt-grid">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-roe" class="view">
+                <div class="view-header">
+                    <h1>Rules of <span class="text-glow">Engagement</span></h1>
+                    <p>Standardized operational protocols for all faction-aligned operators. [v4.2.0]</p>
+                </div>
+
+                <div class="roe-container">
+                    <div class="roe-sidebar">
+                        <nav class="roe-nav">
+                            <a href="#section-1">1.0 Faction Attacks</a>
+                            <a href="#section-2">2.0 Additional Rules</a>
+                            <a href="#section-3">3.0 Combat Ethics</a>
+                            <a href="#section-4">4.0 Communication</a>
+                            <a href="#section-5">5.0 Disciplinary Action</a>
+                        </nav>
+                    </div>
+                    
+                    <div class="roe-content">
+                        <article id="section-1">
+                            <h2>1.0 Faction Attacks</h2>
+                            <p>When you kill or put another member into death mode, attacks are automatically taken into account. Attacks also fall under the following categories:</p>
+                            
+                            <h3>Turf-Based Attacks</h3>
+                            <p>A robbery is considered a faction attack when it occurs on a faction's official turf. (To avoid those who attempt to Play-2-Win and avoid roleplay you do not have to pin-point when robbing an individual within a faction's turf) If the faction member isn't on the set turf, and you are aware that he's apart of the set faction IC, it will not be considered a faction attack. You must have valid reasoning to rob someone as your faction may only rob every 4 hours regardless of the turf, failure to do so will result in punishment.</p>
+                            
+                            <h3>Hostile Environment Creation</h3>
+                            <p>Factions who come to another faction's turf and with the intent to create a hostile environment: visibly aiming your gun (IC), robbing, shooting, stabbing, etc. will be considered a faction attack. Hostile actions can be defined as:</p>
+                            <ul>
+                                <li>Putting someone in the opposing faction in death mode</li>
+                                <li>Brawling</li>
+                                <li>Chasing an opposing faction on feet or in vehicle</li>
+                                <li>Being verbally hostile like dissing their set</li>
+                                <li>Spinning 3 or more times (if the faction reacts upon it)</li>
+                                <li>Coming to an opposing faction's turf instigating or provoking said faction to attack you (example(s): heavily trooping through an opposing faction's turf you heavily beef with)</li>
+                            </ul>
+                            
+                            <h3>Attack Restrictions</h3>
+                            <ul>
+                                <li>You may not attack a faction that is on probation.</li>
+                                <li>If you are attacking and there is less than 4 members outside, you must pinpoint the member your attacking and if you do attack the 4 without pinpointing you must have valid reasoning to believe they are faction members (e.g.: overt disrespect of deceased members or explicit threats to someone's life — for attacks when fewer than four are present you must also roleplay and identify your target in-character (name or alias) and include why you believe they're a faction member. Failure to provide believable, in-character justification risks a faction strike before attacking.</li>
+                                <li>When attacking a solo member not on their turf, you must pinpoint the member by having prior beef with that individual / having this player marked. You must identify who the person is by their face or articles of clothing from a previous interaction. Those interactions must be logged before attacking the individual.</li>
+                                <li>Fist fights are not considered an attack, unless you outnumber the opposing faction (jumping them) or it results in someone in death mode (Beating someone to death is valid IF you & said faction have 7 negative interactions/screens leading to the event must be roleplayed). After a set faction is Tiered, fights only count towards an interaction.</li>
+                                <li>Attacks should be conducted in realistic locations, avoiding heavily populated or surveilled areas. If deemed unrealistic by FM CK will not stick.</li>
+                                <li>After every faction attack you are on a 72-hour cooldown with that faction. 12-hour cooldown with other factions.</li>
+                                <li>Factions that are on probationary, they aren't able to initiate any attacks during. If another faction attacks you, you have rights to defend.</li>
+                                <li>Any negative weapon interaction towards another faction is considered an attack as in upping your gun and pointing it towards someone or robbing someone (if the person is on their turf). Everything must be logged. (flashing your gun in a /me is not an attack.)</li>
+                                <li>If the roleplay is sufficient enough and the opposing faction hasn't slid back within 24 hours, you can double attack.</li>
+                                <li>Poor Escalation - any type of roleplay that wasn't built up properly or given a sufficient reason to perform a faction attack can lead to a punishment. (e.g. You are not allowed to perform an attack if you are on cooldown, regardless if they heavily provoked you. rule applies to DOUBLE ATTACKING as well.)</li>
+                            </ul>
+                        </article>
+
+                        <article id="section-2">
+                            <h2>2.0 Additional Faction Rules</h2>
+                            <ul>
+                                <li>The maximum number of people you're allowed to bring on an attack is 4 people. (This is excluded if it's on your set turf.)</li>
+                                <li>The maximum amount of people you're allowed to bring on a brawl is 10 people per faction. (This includes allies)</li>
+                                <li>After every robbery or faction attack you are on a 4 hour (Player) cooldown.</li>
+                                <li>You may not linger in the faction's turf as it may be considered turf camping.</li>
+                                <li>Attacks must escalate realistically but also organically.</li>
+                                <li>Solo attacks are prohibited unless PINPOINTED. (Have fear or roleplay attacking solo)</li>
+                                <li>Faction Attacks out of multiple vehicles are allowed, as long as the cars equal the correct amount for a faction attack (4).</li>
+                                <li>Without at least Seven Negative quality interactions, arguments included, between the factions, you are not allowed to engage in a shootout with a rival faction.</li>
+                                <li>Members of a faction who are not participating in the faction attack are not permitted to scout or spin enemy turf.</li>
+                                <li>2 Minute clips are required when submitting a Character Kill Ticket. (AMD OR NVDIA)</li>
+                                <li>At public gatherings like parties or get-togethers that were advertised via Word around town in the discord, factions are not permitted to shoot, beef, or cause drama. A different place needs to be chosen for the drama or back and forth. (AUTOMATIC PUNISHMENT IF REPORTED)</li>
+                                <li>With sufficient proof, factions may be terminated for using crosshairs.</li>
+                                <li>To prevent misuse, faction members are not permitted to gang bang or provoke inside safe zones.</li>
+                                <li>Factions must have Three Negative interactions to commit a robbery on another faction.</li>
+                                <li>It is strictly banned to use Discords, streams, clips or engage in general metagaming while playing, and getting caught could result in a faction strike or, depending on the severity, faction termination.</li>
+                                <li>If you are not a member of a faction, you are not able to participate in a faction attack.</li>
+                                <li>After getting injured in a faction attack, you must RP your injuries for 12 hours.</li>
+                                <li>If a faction hasn't applied to become a faction, no gangs or factions can be formed. A faction may start its development and engage in faction activity once it has a thread.</li>
+                                <li>Anything that's not a good representation of Faction Roleplay deemed by LFM could lead to a punishment.</li>
+                                <li>Members of a faction are not permitted to enter local OOC or act out of character without justification. Faction Management will punish you or your faction if you enter local OOC because you are unable to take a L. You can also report any members of a faction that engage in this behavior. Ask questions later after letting the situation develop.</li>
+                                <li>Before even considering participating in a shootout, you must fully develop each character. This is a strict rule that won't be tolerated if broken.</li>
+                                <li>You must stay in the server 30 minutes after initiating the attack, the same thing applies for defense.</li>
+                                <li>You may not attempt to take someone's INVENTORY items after knocking them out, only things like shoes, clothes etc. Everything must be roleplayed with /me's and /do's if doing so.</li>
+                                <li>You must wait AT LEAST 72 hours (3 days) after a character is made and/or joined a faction before committing a faction attack. Failure to do so can be a punishment.</li>
+                                <li>If you want to report a faction a report must be made within 24 hours from the incident - Reporting for revenge because a situation didn't go as planned is forbidden.</li>
+                                <li>If your faction is found to have hackers, cheaters or people using hitbox your faction will be L&A.</li>
+                                <li>As a Faction Member, you are only allowed to roleplay your injuries IF you get shot and DON'T enter the death script, if you enter the death script while being shot you are to Character Kill. (CK)</li>
+                                <li>No speed boosting & 100k or die shooting when in the server.</li>
+                                <li>Any type of game modifications or software which gives a player any advantage over another player is Forbidden. This includes the following; mods, crosshairs, tracers, stretch resolution, unlimited stamina etc.</li>
+                                <li>First person FOV modifications are allowed.</li>
+                                <li>If another faction member asks you where you are from you are to bang your hood at all times failure to do so will result in a FACTION STRIKE/WARNING.</li>
+                                <li>Kidnapping is a part of robbing, you can kidnap and rob but you may not kidnap and kill. (Torture Roleplay)</li>
+                                <li>If you have an open report on another faction - you should not participate in any types of interactions with this faction until the verdict has been decided and posted (vice versa).</li>
+                                <li>Shooter's POV MUST be provided if asked upon, any failure to do so could result in a loss of a report, which could end up in your faction getting punished.</li>
+                                <li>Public bashing and/or OOC Toxicity to a set faction's roleplay could result in a punishment, please note to make a report or leave it as is, have common courtesy upon the faction.</li>
+                                <li>Committing a faction attack out of electric vehicles are STRICTLY FORBIDDEN, as it can result in punishment.</li>
+                                <li>If the user is outnumbered while being circled, cornered, etc you must value your life and fear.</li>
+                            </ul>
+                        </article>
+
+                        <article id="section-3">
+                            <h2>3.0 Combat Ethics</h2>
+                            <p>Engagements must be conducted within the designated conflict zones. Random targeting of non-aligned civilians is strictly prohibited.</p>
+                            <blockquote>"Precision over Power. Strategy over Slaughter."</blockquote>
+                            <p>Spawn camping or targeting players immediately following an Arsenal Spin is considered a Tier-3 violation.</p>
+                            <p>All combat interactions must follow proper escalation protocols and maintain realistic roleplay standards. Failure to adhere to combat ethics may result in disciplinary action.</p>
+                        </article>
+
+                        <article id="section-4">
+                            <h2>4.0 Communication</h2>
+                            <p>The Comms Node is a monitored channel. Spamming, toxic behavior, or the leaking of faction-private intelligence (intel) in Global Chat will result in a permanent mute.</p>
+                            <p>All operators are expected to maintain professional communication standards. OOC toxicity, public bashing, or engaging in metagaming through communication channels is strictly prohibited and will result in immediate disciplinary action.</p>
+                        </article>
+
+                        <article id="section-5">
+                            <h2>5.0 Disciplinary Action</h2>
+                            <p>The Faction Management team reserves the right to freeze credits, seize inventory, or blacklist Operator IDs based on the severity of the ROE violation.</p>
+                            <div class="warning-box">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span>WARNING: Three recorded violations result in a permanent hardware ID ban.</span>
+                            </div>
+                            <p>Violations are tracked and cumulative. Minor infractions may result in warnings or strikes, while major violations can lead to immediate faction termination or permanent bans. All disciplinary actions are final and non-negotiable.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-profile" class="view">
+                <div class="view-header">
+                    <h1>Account <span class="text-glow">Profile</span></h1>
+                    <p>Manage operator identity, avatar, and session security.</p>
+                </div>
+
+                <div class="profile-settings">
+                    <div class="profile-section">
+                        <div class="profile-avatar-section">
+                            <div class="profile-avatar-large" id="profile-avatar-large">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div style="text-align:center;">
+                                <div class="profile-name" id="profile-display-name">OPERATOR</div>
+                                <div class="profile-sub">ENCRYPTED_NODE</div>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-section">
+                            <div class="profile-info-item">
+                                <label>Change Operator Name</label>
+                                <div class="profile-input-group">
+                                    <input type="text" id="new-name-input" placeholder="Enter new name...">
+                                    <button class="profile-edit-btn" type="button" onclick="updateAccountDetails()" title="Save">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-item">
+                                <label>Profile Image URL</label>
+                                <div class="profile-input-group">
+                                    <input type="text" id="new-avatar-input" placeholder="https://...">
+                                    <button class="profile-edit-btn" type="button" onclick="updateAccountDetails()" title="Save">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-item">
+                                <label>Faction</label>
+                                <div class="profile-faction-section">
+                                    <div class="profile-faction-display">
+                                        <span class="faction-badge" id="profile-faction-display">None</span>
+                                    </div>
+                                    <div class="profile-faction-selector">
+                                        <select id="profile-faction-select" class="profile-select">
+                                            <option value="None">None (Independent)</option>
+                                            <option value="Cartel">Cartel</option>
+                                            <option value="Syndicate">Syndicate</option>
+                                            <option value="Brotherhood">Brotherhood</option>
+                                            <option value="Legion">Legion</option>
+                                            <option value="Vanguard">Vanguard</option>
+                                            <option value="Outlaws">Outlaws</option>
+                                            <option value="Shadows">Shadows</option>
+                                        </select>
+                                        <button class="profile-edit-btn" type="button" onclick="updateFaction()" title="Change Faction">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                    </div>
+                                    <button class="btn-leave-faction" type="button" id="leave-faction-btn" onclick="leaveFaction()" style="display:none;">
+                                        <i class="fa-solid fa-sign-out-alt"></i> Leave Faction
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button class="profile-btn" type="button" onclick="updateAccountDetails()">SAVE CHANGES</button>
+                            <button class="logout-btn" type="button" onclick="logout()">LOGOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- CHAT PANEL -->
+        <div id="chat-node" class="chat-panel">
+            <div class="chat-header">
+                <span class="chat-title">COMMS_NODE</span>
+                <div class="chat-tabs">
+                    <button class="chat-tab active" onclick="switchChat('global')">GLOBAL</button>
+                    <button class="chat-tab" id="faction-tab" onclick="switchChat('faction')">FACTION</button>
+                </div>
+                <button class="close-chat" onclick="toggleChat()" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type message..." onkeydown="if(event.key==='Enter') sendMessage()" autocomplete="off">
+                <button onclick="sendMessage()" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <div id="modal" class="modal-overlay" onclick="closeModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <div class="modal-layout">
+                    <div class="modal-preview" id="modal-icon"></div>
+                    <div class="modal-info">
+                        <div class="modal-header-info">
+                            <h2 id="modal-title">Item Name</h2>
+                            <span class="rarity-tag" id="modal-rarity">Tier 1</span>
+                        </div>
+                        <p id="modal-desc">Description goes here.</p>
+                        
+                        <!-- Weapon Stats Container -->
+                        <div class="stats-container" id="weapon-stats">
+                            <div class="stat-item">
+                                <div class="stat-label-row">
+                                    <span class="stat-label">DAMAGE</span>
+                                    <span class="stat-value" id="stat-damage-value">0</span>
+                                </div>
+                                <div class="progress-bg"><div class="progress-bar" id="stat-damage"></div></div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label-row">
+                                    <span class="stat-label">FIRE SPEED</span>
+                                    <span class="stat-value" id="stat-firespeed-value">0</span>
+                                </div>
+                                <div class="progress-bg"><div class="progress-bar" id="stat-firespeed"></div></div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label-row">
+                                    <span class="stat-label">RANGE</span>
+                                    <span class="stat-value" id="stat-range-value">0</span>
+                                </div>
+                                <div class="progress-bg"><div class="progress-bar" id="stat-range"></div></div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label-row">
+                                    <span class="stat-label">ACCURACY</span>
+                                    <span class="stat-value" id="stat-accuracy-value">0</span>
+                                </div>
+                                <div class="progress-bg"><div class="progress-bar" id="stat-accuracy"></div></div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label-row">
+                                    <span class="stat-label">RELIABILITY</span>
+                                    <span class="stat-value" id="stat-rel-value">0</span>
+                                </div>
+                                <div class="progress-bg"><div class="progress-bar" id="stat-rel"></div></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Drug Details Container -->
+                        <div class="drug-details-container" id="drug-details" style="display: none;">
+                            <div class="drug-bonus" id="drug-bonus"></div>
+                            <div class="drug-info-grid">
+                                <div class="drug-info-item">
+                                    <span class="drug-info-label">Type</span>
+                                    <span class="drug-info-value" id="drug-type">-</span>
+                                </div>
+                                <div class="drug-info-item">
+                                    <span class="drug-info-label">Effect</span>
+                                    <span class="drug-info-value" id="drug-effect">-</span>
+                                </div>
+                                <div class="drug-info-item">
+                                    <span class="drug-info-label">Form</span>
+                                    <span class="drug-info-value" id="drug-form">-</span>
+                                </div>
+                                <div class="drug-info-item">
+                                    <span class="drug-info-label">Notes</span>
+                                    <span class="drug-info-value" id="drug-notes">-</span>
+                                </div>
+                                <div class="drug-info-item">
+                                    <span class="drug-info-label">Price</span>
+                                    <span class="drug-info-value" id="drug-price">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Attachment Details Container -->
+                        <div class="attachment-details-container" id="attachment-details" style="display: none;">
+                            <div class="attachment-info-grid">
+                                <div class="attachment-info-item">
+                                    <span class="attachment-info-label">Type</span>
+                                    <span class="attachment-info-value" id="attachment-type">-</span>
+                                </div>
+                                <div class="attachment-info-item">
+                                    <span class="attachment-info-label">Compatibility</span>
+                                    <span class="attachment-info-value" id="attachment-compatibility">-</span>
+                                </div>
+                                <div class="attachment-info-item">
+                                    <span class="attachment-info-label">Capacity</span>
+                                    <span class="attachment-info-value" id="attachment-capacity">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <div class="footer-line"></div>
+            <div class="footer-content">
+                <span>SYSTEM STATUS: <span class="online">ENCRYPTED</span></span>
+                <span>DESIGN BY Web Development</span>
+            </div>
+        </footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
